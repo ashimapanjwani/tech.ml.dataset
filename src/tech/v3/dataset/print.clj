@@ -119,7 +119,9 @@ tech.ml.dataset.github-test> (def ds (with-meta ds
   ([dataset options]
    (let [{:keys [print-index-range print-line-policy print-column-max-width]}
          (merge (meta dataset) options)
-         index-range (or print-index-range
+         index-range (or (if (= :all print-index-range)
+                           (range (second (dtype/shape dataset)))
+                           print-index-range)
                          (range
                           (min (second (dtype/shape dataset))
                                *default-table-row-print-length*)))
